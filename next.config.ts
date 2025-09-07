@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const nextConfig: NextConfig = {
   /* config options here */
