@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  padding: 5px;
+  font-weight: 600;
+  color: var(--text_secondary_300);
+  transition: var(--dt);
+
+  &:hover {
+    color: var(--text_default);
+  }
+}
+
+.wrapper.active {
+  color: var(--primary);
+}

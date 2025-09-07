@@ -1,0 +1,11 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  .form {
+    max-width: 510px;
+    width: 100%;
+    padding: 20px;
+  }
+}

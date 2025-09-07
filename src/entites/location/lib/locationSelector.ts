@@ -1,0 +1,1 @@
+export const locationSelector = (store: StoreType) => store.locationReducer

@@ -1,0 +1,35 @@
+{
+  "name": "moviesea",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@headlessui/react": "^2.2.4",
+    "@react-spring/web": "^10.0.1",
+    "@reduxjs/toolkit": "^2.8.2",
+    "framer-motion": "^12.23.12",
+    "lineicons-react": "^2.0.0",
+    "next": "15.2.2",
+    "next-auth": "^4.24.11",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0",
+    "redux": "^5.0.1",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.2",
+    "sass": "^1.89.2",
+    "typescript": "^5"
+  }
+}

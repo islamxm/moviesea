@@ -1,0 +1,9 @@
+.wrapper {
+  display: block;
+  position: relative;
+  padding: 8px;
+  flex: 0 0 calc((100% - (3 * 20px)) / 4);
+  border-radius: var(--b_radius);
+  background-color: var(--bg_color_light);
+  overflow: hidden;
+}

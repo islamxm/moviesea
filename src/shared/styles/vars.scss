@@ -1,0 +1,45 @@
+:root {
+  //global
+  --b_radius: 12px;
+  --font_size: 16px;
+  --line_height: 150%;
+  
+  //transitions
+  --dt: all .1s ease;
+
+  //depends theme
+  --text_default: #ebeef5;
+  --text_accent: #7b6ef6;
+  --text_secondary_200: #a8aebf;
+  --text_secondary_300: #8e95a9;
+  --text_secondary_400: #767e94;
+  --text_secondary_600: #475069;
+  --bg_color: #121829;
+  --bg_color_light: #20283e;
+  --bg_color_dark: #0d121f;
+  
+
+  //const
+  --primary: #7b6ef6;
+  --primary_accent: #5a4af4;
+
+  --warning: #ffad49;
+  --warning_accent: #cc8a3a;
+
+  --error: #ff6161;
+  --error_accent: #cc4e4e;
+  
+  --success: #05ce91;
+  --success_accent: #04a574;
+  
+  --black: #000000;
+  --white: #ffffff;
+
+
+  // rgb
+  --rgb_bg_color_rgb: 18,24,41;
+  --rgb_bg_color_light: 32,40,62;
+  --rgb_bg_color_dark: 13,18,31;
+
+  --rgb_primary: 123,110,246
+}

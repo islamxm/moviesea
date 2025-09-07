@@ -1,0 +1,1 @@
+export { AboutPage as AboutPageComponent } from "./ui/AboutPage/AboutPage";

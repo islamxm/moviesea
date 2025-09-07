@@ -1,0 +1,228 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: none;
+  cursor: pointer;
+  transition: var(--dt);
+  border: none;
+  overflow: hidden;
+  white-space: nowrap;
+  outline: 2px solid transparent;
+  border:2px solid transparent;
+  position: relative;
+  font-weight: 600;
+  color: var(--text_default);
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    pointer-events: none;
+    touch-action: none;
+    opacity: .3;
+  }
+
+  .main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:var(--text_default);
+  }
+
+  .before {
+    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .after {
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .main,.extra {
+    transition: var(--dt);
+  }
+
+}
+
+.wrapper.loading {
+  pointer-events: none;
+  touch-action: none;
+  opacity: .5;
+  .main,.extra {
+    opacity: 0 !important;
+  }
+}
+
+.wrapper.extra_sm {
+  padding: 10px 15px;
+  border-radius: calc(var(--b_radius) - 6px);
+}
+
+.wrapper.sm {
+  padding: 12px 27px;
+  border-radius: calc(var(--b_radius) - 3px);
+  // min-height: 52px;
+}
+
+.wrapper.md {
+  padding: 15px 30px;
+  border-radius: var(--b_radius);
+  // min-height: 61px;
+}
+
+.wrapper.lg {
+  padding: 18px 33px;
+  border-radius: calc(var(--b_radius) + 3px);
+  // min-height: 70px;
+}
+
+.wrapper.fill {
+  width: 100%;
+}
+
+.wrapper.icon {}
+
+.wrapper.icon.sm {}
+
+.wrapper.icon.md {}
+
+.wrapper.icon.lg {}
+
+.wrapper.primary {
+  background-color: var(--primary);
+  color: var(--text_default);
+
+  &:hover {
+    background-color: var(--primary_accent);
+  }
+
+  &:focus {
+    outline-color: var(--primary_accent);
+  }
+}
+
+.wrapper.error {
+  background-color: var(--error);
+  color: var(--text_default);
+
+  &:hover {
+    background-color: var(--error_accent);
+  }
+
+  &:focus {
+    outline-color: var(--error_accent);
+  }
+}
+
+.wrapper.warning {
+  background-color: var(--warning);
+  color: var(--black);
+
+  &:hover {
+    background-color: var(--warning_accent);
+  }
+
+  &:focus {
+    outline-color: var(--warning_accent);
+  }
+}
+
+.wrapper.success {
+  background-color: var(--success);
+  color: var(--text_default);
+
+  &:hover {
+    background-color: var(--success_accent);
+  }
+
+  &:focus {
+    outline-color: var(--success_accent);
+  }
+}
+
+.wrapper.primary.outlined {
+  background-color: unset;
+  border-color: var(--primary);
+  color: var(--primary);
+
+  &:hover {
+    border-color: var(--primary_accent);
+    background-color: var(--primary_accent);
+    color: var(--text_default);
+  }
+}
+
+.wrapper.warning.outlined {
+  background-color: unset;
+  border-color: var(--warning);
+  color: var(--warning);
+
+  &:hover {
+    border-color: var(--warning_accent);
+    background-color: var(--warning_accent);
+    color: var(--black);
+  }
+}
+
+.wrapper.error.outlined {
+  background-color: unset;
+  border-color: var(--error);
+  color: var(--error);
+
+  &:hover {
+    border-color: var(--error_accent);
+    background-color: var(--error_accent);
+    color: var(--text_default);
+  }
+}
+
+.wrapper.success.outlined {
+  background-color: unset;
+  border-color: var(--success);
+  color: var(--success);
+
+  &:hover {
+    border-color: var(--success_accent);
+    background-color: var(--success_accent);
+    color: var(--text_default);
+  }
+}
+
+.wrapper.primary.simple {
+  background-color: unset;
+  border-color: unset;
+  
+  border-color: transparent;
+
+
+  .main, .extra {
+    color: var(--text_secondary_300);
+  }
+
+  &:focus, &:active {
+    outline-color: transparent !important;
+  }
+
+  &:hover {
+    .main, .extra {
+      color: var(--text_default) !important;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+.wrapper {
+  display: block;
+
+  svg {
+    width: 100%;
+    height: 100%;
+
+    path {
+      &:nth-child(1) {}
+
+
+    }
+  }
+
+  &:hover {
+    svg {
+      path {
+        &:nth-child(2) {
+          animation: skt .5s ease infinite forwards;
+        }
+      }
+    }
+  }
+}
+
+@keyframes skt {
+  0% {
+    fill: #7B6EF6;
+  }
+
+  50% {
+    fill: #1EA5FC;
+  }
+
+  100% {
+    fill: #7B6EF6;
+  }
+}
