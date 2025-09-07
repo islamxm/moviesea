@@ -1,22 +1,36 @@
-import { useDispatch } from "@/shared/hooks/useStore"
 import { useEffect } from "react"
-import { locationActions } from "../model/locationSlice"
-
-
-const t = new Promise((res, rej) => {
-  window.navigator.geolocation.getCurrentPosition(res, rej)
-})
 
 export const useLocation = () => {
   // const dispatch = useDispatch()
 
   useEffect(() => {
-    if (window.navigator.geolocation) {
-      //если браузер поддерживает Geolocation API
-      t.then(res => console.log(res))
-
+    if (!navigator.geolocation) {
+      //Geolocation API не поддерживается
     }
-    console.log('test')
+
+    navigator.geolocation.getCurrentPosition(
+        success => {
+          
+          //получили разрешение
+          const {latitude, longitude} = success.coords
+
+
+        },
+        error => {
+          // поизошла ошибка
+          switch (error.code) {
+            case GeolocationPositionError.TIMEOUT:
+              console.log('Время истекло')
+              break
+            case GeolocationPositionError.PERMISSION_DENIED:
+              console.log('Пользователь запретил определить местоположение')
+              break
+            case GeolocationPositionError.POSITION_UNAVAILABLE:
+              console.log('Не удалось определить местоположение')
+              break
+          }
+        }
+      )
   }, [])
 
 }

@@ -9,7 +9,6 @@ import { useDispatch } from '@/shared/hooks/useStore'
 import { appHeaderActions } from '../../model/appHeaderSlice'
 import { AppNavigation } from '@/features/app-navigation'
 import { HeaderUserButton } from '@/features/header-user-button'
-import { SelectLocation } from '@/features/select-location'
 
 export const AppHeader = () => {
   const dispatch = useDispatch()
@@ -31,7 +30,6 @@ export const AppHeader = () => {
       <HStack align={'center'} fill justify={'between'}>
         <AppLogo isLink size={60} />
         <HStack gap={20} align={'center'}>
-          <SelectLocation/>
           <AppNavigation />
           <HeaderUserButton isAuth/>
         </HStack>
