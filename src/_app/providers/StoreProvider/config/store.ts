@@ -18,5 +18,6 @@ export const createStore = (preloadedState?: any) => {
   })
 }
 
+
 export type RootState = ReturnType<ReturnType<typeof createStore>['getState']>
 export type AppDispatch = ReturnType<typeof createStore>['dispatch']

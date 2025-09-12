@@ -1,13 +1,14 @@
 import { rtkApi } from "@/shared/api/rtkApi";
-import { SeriesBase } from "../model";
 import { SeriesDtoSchema } from "@/shared/api/contracts";
 import z from "zod";
 import { seriesDtoMap } from "../lib/seriesDtoMap";
+import { AppLanguages } from "@/shared/types/locale";
+import { ListResponse, SeriesDto } from "@/shared/api/types";
 
 export const seriesApi = rtkApi.injectEndpoints({
   endpoints: (build) => ({
 
-    getAiringTodaySeries: build.query<any, { page?: number, language?: string }>({
+    getAiringTodaySeries: build.query<ListResponse<SeriesDto>, { page?: number, language?: AppLanguages }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'tv/airing_today',
         params: {
@@ -16,20 +17,26 @@ export const seriesApi = rtkApi.injectEndpoints({
         }
       }),
       merge(currentCacheData, res) {
-        currentCacheData?.push(...res)
+        currentCacheData.data.push(...res.data)
+
       },
-      // serializeQueryArgs: ({ endpointName, ...rest }) => {
-      //   return endpointName
-      // },
+      serializeQueryArgs: ({ endpointName, ...rest }) => {
+        return endpointName
+      },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg?.page !== previousArg?.page
       },
-      transformResponse: (res: any): Array<SeriesBase> => {
-        return z.array(SeriesDtoSchema).parse(res.results).map(seriesDtoMap)
+      transformResponse: (res: any): any => {
+        if (z.array(SeriesDtoSchema).parse(res.results)) {
+          return {
+            data: res.results.map(seriesDtoMap) || [],
+            totalPages: res.total_pages
+          }
+        }
       },
     }),
 
-    getOnTheAirSeries: build.query<any, { page?: number, language?: string }>({
+    getOnTheAirSeries: build.query<ListResponse<SeriesDto>, { page?: number, language?: AppLanguages }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'tv/on_the_air',
         params: {
@@ -38,7 +45,7 @@ export const seriesApi = rtkApi.injectEndpoints({
         }
       }),
       merge(currentCacheData, res) {
-        currentCacheData?.push(...res)
+        currentCacheData.data.push(...res.data)
       },
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName
@@ -46,12 +53,17 @@ export const seriesApi = rtkApi.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg?.page !== previousArg?.page
       },
-      transformResponse: (res: any): Array<SeriesBase> => {
-        return z.array(SeriesDtoSchema).parse(res.results).map(seriesDtoMap)
+      transformResponse: (res: any): any => {
+        if (z.array(SeriesDtoSchema).parse(res.results)) {
+          return {
+            data: res.results.map(seriesDtoMap) || [],
+            totalPages: res.total_pages
+          }
+        }
       },
     }),
 
-    getPopularSeries: build.query<any, { page?: number, language?: string }>({
+    getPopularSeries: build.query<ListResponse<SeriesDto>, { page?: number, language?: AppLanguages }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'tv/popular',
         params: {
@@ -60,7 +72,8 @@ export const seriesApi = rtkApi.injectEndpoints({
         }
       }),
       merge(currentCacheData, res) {
-        currentCacheData?.push(...res)
+        currentCacheData.data.push(...res.data)
+
       },
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName
@@ -68,12 +81,17 @@ export const seriesApi = rtkApi.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg?.page !== previousArg?.page
       },
-      transformResponse: (res: any): Array<SeriesBase> => {
-        return z.array(SeriesDtoSchema).parse(res.results).map(seriesDtoMap)
+      transformResponse: (res: any): any => {
+        if (z.array(SeriesDtoSchema).parse(res.results)) {
+          return {
+            data: res.results.map(seriesDtoMap) || [],
+            totalPages: res.total_pages
+          }
+        }
       },
     }),
 
-    getTopRatedSeries: build.query<any, { page?: number, language?: string }>({
+    getTopRatedSeries: build.query<ListResponse<SeriesDto>, { page?: number, language?: AppLanguages }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'tv/top_rated',
         params: {
@@ -82,7 +100,8 @@ export const seriesApi = rtkApi.injectEndpoints({
         }
       }),
       merge(currentCacheData, res) {
-        currentCacheData?.push(...res)
+        currentCacheData.data.push(...res.data)
+
       },
       serializeQueryArgs: ({ endpointName }) => {
         return endpointName
@@ -90,8 +109,13 @@ export const seriesApi = rtkApi.injectEndpoints({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg?.page !== previousArg?.page
       },
-      transformResponse: (res: any): Array<SeriesBase> => {
-        return z.array(SeriesDtoSchema).parse(res.results).map(seriesDtoMap)
+      transformResponse: (res: any): any => {
+        if (z.array(SeriesDtoSchema).parse(res.results)) {
+          return {
+            data: res.results.map(seriesDtoMap) || [],
+            totalPages: res.total_pages
+          }
+        }
       },
     })
   })

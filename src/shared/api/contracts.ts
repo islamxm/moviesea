@@ -101,3 +101,8 @@ export const ReviewDtoSchema = z.object({
   updated_at: z.string(),
   url: z.url()
 })
+
+// export const ListResponseSchema = z.object({
+//   data: z.array(z.object()),
+//   totalPages: 
+// })

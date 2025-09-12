@@ -1,22 +1,26 @@
-'use client'
-import { FC, PropsWithChildren, useEffect } from 'react'
+// 'use client'
+import { FC, PropsWithChildren } from 'react'
 import classes from './classes.module.scss'
 import { AppHeader } from '@/widgets/app-header'
-import { useInitialData } from '@/shared/hooks/useInitialData'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { Button } from '@/shared/ui/Button/Button'
-import { useLocation } from '@/entites/location'
+// import { InitDataLayout } from '@/_app/layouts/InitDataLayout'
+import { headers, cookies } from 'next/headers'
 
-export const MainLayout: FC<PropsWithChildren> = ({ children }) => {
-  useInitialData()
-  useLocation()
+export const MainLayout: FC<PropsWithChildren> = async (props) => {
+  // const resetApi = () => rtkApi.util.resetApiState()
 
-  const resetApi = () => rtkApi.util.resetApiState()
+  const headersList = await headers();
 
   return (
+    // <InitDataLayout
+    //   acceptLanguage={headersList.get('accept-language')}
+    //   >
     <div className={classes.wrapper}>
       <AppHeader />
-      <div className={classes.content}>{children}</div>
+      <div className={classes.content}>
+        {props.children}
+      </div>
 
       {/* --------------------temp-------------------- */}
       {/* <Button onClick={resetApi} className={classes.temp} buttonSize={'extra_sm'}>reset api</Button> */}

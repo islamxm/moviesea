@@ -4,7 +4,6 @@ import { Ref, RefObject, useEffect } from "react";
 export const useLoadMore = (
   ref: RefObject<HTMLDivElement | null>,
   isFetching?: boolean,
-  isError?: boolean,
   onLoadMore?: (...args: any[]) => void,
 ) => {
 

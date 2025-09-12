@@ -8,6 +8,11 @@ import {
   MovieDetailsDtoSchema
 } from "./contracts";
 
+export type ListResponse<T extends {}> = {
+  data: Array<T>,
+  totalPages: number
+}
+
 export type UserDto = z.infer<typeof UserDtoSchema>
 
 export type MovieDto = z.infer<typeof MovieDtoSchema>

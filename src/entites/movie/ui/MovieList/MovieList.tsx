@@ -1,8 +1,8 @@
+'use client'
 import { MovieCard } from '../MovieCard/MovieCard'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
-import { FC, useEffect, useRef } from 'react'
+import { FC, useRef } from 'react'
 import { ComponentStatusProps } from '@/shared/types/ui'
-import { MovieCardSkeleton } from '../MovieCard/MovieCard.skeleton'
 import { MovieCardExtra } from '../MovieCardExtra/MovieCardExtra'
 import { AdultBadge } from '../AdultBadge/AdultBadge'
 import { VoteAverageBadge } from '../VoteAverageBadge/VoteAverageBadge'
@@ -27,22 +27,17 @@ export const MovieList: FC<Props> = ({
   isLoading = true,
   isError,
   isFetching,
-  isSuccess,}) => {
+  isSuccess, }) => {
   const loaderRef = useRef<HTMLDivElement>(null)
   const canLoadMore = (currentPage && totalPages) && currentPage <= totalPages
 
   useLoadMore(
     loaderRef,
     isFetching,
-    isError,
     onLoadMore,
   )
 
-  useEffect(() => {
-    console.log('error')
-  }, [isError])
-
-  // if (isError) return <>Error</>
+  if (isError) return <>Error</>
 
   if (isLoading) return <MovieListSkeleton />
 

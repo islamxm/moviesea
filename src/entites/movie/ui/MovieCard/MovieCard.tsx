@@ -1,3 +1,4 @@
+'use client'
 import { FC, memo, ReactNode, useState } from 'react'
 import classes from './classes.module.scss'
 import { Title } from '@/shared/ui/Title/Title'
