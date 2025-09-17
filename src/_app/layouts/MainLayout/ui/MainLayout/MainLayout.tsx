@@ -1,6 +1,6 @@
 // 'use client'
 import { FC, PropsWithChildren } from 'react'
-// import classes from './classes.module.scss'
+import classes from './classes.module.scss'
 import { AppHeader } from '@/widgets/app-header'
 import { rtkApi } from '@/shared/api/rtkApi'
 import { Button } from '@/shared/ui/Button/Button'
@@ -16,9 +16,9 @@ export const MainLayout: FC<PropsWithChildren> = async (props) => {
     // <InitDataLayout
     //   acceptLanguage={headersList.get('accept-language')}
     //   >
-    <div>
+    <div className={classes.wrapper}>
       <AppHeader />
-      <div>
+      <div className={classes.content}>
         {props.children}
       </div>
 

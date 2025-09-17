@@ -1,17 +1,19 @@
 'use client'
 import { locationSelector } from "@/entites/location"
-import { movieApi, MovieList } from "@/entites/movie"
+import { movieApi } from "@/entites/movie"
 import { useSelector } from "@/shared/hooks/useStore"
-import { FC, useState } from "react"
+import { FC, useState, useMemo } from "react"
 import { loadMore } from "../../lib/loadMore"
-import { useDispatch } from "@/shared/hooks/useStore"
+import { ListResponse } from "@/shared/api/types"
+import { MediaBase } from "@/shared/api/types"
+import { MediaList } from "@/features/media-list"
+import { MovieCard } from "@/entites/movie"
 
 type Props = {
-  initialData?: any 
+  initialData: ListResponse<MediaBase>
 }
 
-export const NowPlayingMovies:FC<Props> = ({initialData}) => {
-  const dispatch = useDispatch()
+export const NowPlayingMovies: FC<Props> = ({ initialData }) => {
   const { language } = useSelector(locationSelector)
   const [page, setPage] = useState(1)
   const {
@@ -23,24 +25,31 @@ export const NowPlayingMovies:FC<Props> = ({initialData}) => {
     refetch
   } = movieApi.useGetNowPlayingMoviesQuery({
     page,
-    language: 'en-EN'
-  }, {skip: true})
+    language
+  }, { skip: page > 1 ? false : true })
 
+  const list = [...initialData.data, ...(data?.data || [])] 
 
   return (
-    
-    <MovieList
-      isLoading={false}
-      isFetching={false}
-      isSuccess={true}
-      isError={false}
-      data={[...initialData, ...data?.data || []]}
-      // data={data?.data || []}
-      // data={initialData}
+    <MediaList
+      isLoading={isLoading && page === 1}
+      isFetching={isFetching}
+      isSuccess={isSuccess}
+      isError={isError}
       onLoadMore={() => loadMore(refetch, () => setPage(s => ++s), isError)}
-      // canLoadMore={false}
-      totalPages={100}
+      totalPages={initialData.totalPages || data?.totalPages || 1}
       currentPage={page}
-    />
+    >
+      {
+        list.map(product => {
+          return (
+            <MovieCard
+              {...product}
+              type={'movie'}
+            />
+          )
+        })
+      }
+    </MediaList>
   )
 }

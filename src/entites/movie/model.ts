@@ -1,3 +1,6 @@
+import z from 'zod'
+import { MovieDtoSchema, MovieDetailsDtoSchema } from "./contracts"
+
 export type MovieLists = 'now-playing' | 'popular' | 'top-rated' | 'upcoming'
 
 export const movieLists:Record<MovieLists, any> = {
@@ -7,11 +10,5 @@ export const movieLists:Record<MovieLists, any> = {
   'upcoming': {id: 3, label: 'Upcoming', value: 'upcoming'},
 } 
 
-export type MovieBase = {
-  id: number,
-  poster_path: string | null
-  title: string
-  vote_average: number,
-  adult: boolean,
-  genres: any[]
-}
+export type MovieDto = z.infer<typeof MovieDtoSchema>
+export type MovieDetailsDto = z.infer<typeof MovieDetailsDtoSchema>

@@ -2,19 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Language, Location } from "@/shared/types/locale";
 
 type State = {
-  language: Language
+  language: string
   location: Location | null
 }
 
 const initialState: State = {
-  language: {
-    locale: 'en-EN',
-    name: {
-      'en-EN': 'English',
-      'ru-RU': 'Russian'
-    },
-    countries: []
-  },
+  language: 'en-US',
   location: null
 }
 
@@ -23,7 +16,7 @@ const locationSlice = createSlice({
   initialState,
   reducers: {
 
-    updateLang: (state, { payload }: PayloadAction<Language>) => { state.language = payload },
+    updateLang: (state, { payload }: PayloadAction<string>) => { state.language = payload },
 
     updateLocation: (state, { payload }: PayloadAction<Location | null>) => { state.location = payload }
 

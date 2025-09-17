@@ -3,7 +3,7 @@ import { HStack } from "@/shared/ui/Stack/HStack/HStack"
 import { VStack } from "@/shared/ui/Stack/VStack/VStack"
 import classes from './classes.module.scss'
 
-export const MovieCardSkeleton = () => {
+export const CardSkeleton = () => {
   return (
     <Skeleton 
       width={'100%'} 

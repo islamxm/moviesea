@@ -4,6 +4,7 @@ import { Poppins } from "next/font/google";
 import '@/shared/styles/styles.scss'
 import AppRoot from "@/_app/AppRoot";
 import { MainLayout } from "@/_app/layouts/MainLayout";
+import { Toaster } from 'sonner'
 
 const poppins = Poppins({
   variable: "--font-family",
@@ -32,6 +33,7 @@ export default function RootLayout({
       <body className={poppins.variable}>
         <AppRoot>
           <MainLayout>{children}</MainLayout>
+          <Toaster />
         </AppRoot>
       </body>
     </html>

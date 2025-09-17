@@ -5,5 +5,4 @@ export {
 } from "./model";
 
 export { MovieCard } from "./ui/MovieCard/MovieCard";
-export { MovieList } from "./ui/MovieList/MovieList";
 

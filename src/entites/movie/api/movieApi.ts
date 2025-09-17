@@ -1,14 +1,15 @@
 import { rtkApi } from "@/shared/api/rtkApi";
-import { MovieDtoSchema } from "@/shared/api/contracts";
 import z from "zod";
-import { ListResponse, MovieDto } from "@/shared/api/types";
+import { ListResponse, MediaBase } from "@/shared/api/types";
+import { MovieDto } from "../model";
+import { MovieDtoSchema } from "../contracts";
 import { movieDtoMap } from "../lib/movieDtoMap";
 import { AppLanguages } from "@/shared/types/locale";
 
 export const movieApi = rtkApi.injectEndpoints({
   endpoints: (build) => ({
 
-    getNowPlayingMovies: build.query<ListResponse<MovieDto>, { page?: number, language?: AppLanguages }>({
+    getNowPlayingMovies: build.query<ListResponse<MediaBase>, { page?: number, language?: string }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'movie/now_playing',
         params: {
@@ -36,7 +37,7 @@ export const movieApi = rtkApi.injectEndpoints({
       // keepUnusedDataFor: 0
     }),
 
-    getPopularMovies: build.query<ListResponse<MovieDto>, { page?: number, language?: AppLanguages }>({
+    getPopularMovies: build.query<ListResponse<MediaBase>, { page?: number, language?: string }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'movie/popular',
         params: {
@@ -65,7 +66,7 @@ export const movieApi = rtkApi.injectEndpoints({
       // keepUnusedDataFor: 0
     }),
 
-    getTopRatedMovies: build.query<ListResponse<MovieDto>, { page?: number, language?: AppLanguages }>({
+    getTopRatedMovies: build.query<ListResponse<MediaBase>, { page?: number, language?: string }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'movie/top_rated',
         params: {
@@ -93,7 +94,7 @@ export const movieApi = rtkApi.injectEndpoints({
       // keepUnusedDataFor: 0
     }),
 
-    getUpcomingMovies: build.query<ListResponse<MovieDto>, { page?: number, language?: AppLanguages }>({
+    getUpcomingMovies: build.query<ListResponse<MediaBase>, { page?: number, language?: string }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'movie/upcoming',
         params: {

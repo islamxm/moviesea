@@ -1,11 +1,19 @@
-import { MovieList } from "@/entites/movie"
-import { movieApi } from "@/entites/movie"
-import { useState } from "react"
+'use client'
 import { locationSelector } from "@/entites/location"
+import { movieApi } from "@/entites/movie"
 import { useSelector } from "@/shared/hooks/useStore"
+import { FC, useState } from "react"
 import { loadMore } from "../../lib/loadMore"
+import { ListResponse } from "@/shared/api/types"
+import { MediaBase } from "@/shared/api/types"
+import { MediaList } from "@/features/media-list"
+import { MovieCard } from "@/entites/movie"
 
-export const PopularMovies = () => {
+type Props = {
+  initialData: ListResponse<MediaBase>
+}
+
+export const PopularMovies: FC<Props> = ({ initialData }) => {
   const { language } = useSelector(locationSelector)
   const [page, setPage] = useState(1)
   const {
@@ -17,20 +25,31 @@ export const PopularMovies = () => {
     refetch
   } = movieApi.useGetPopularMoviesQuery({
     page,
-    language: language.locale
-  })
+    language
+  }, { skip: page > 1 ? false : true })
+
+  const list = [...initialData.data, ...(data?.data || [])]
 
   return (
-    <MovieList
-      isLoading={isLoading}
+    <MediaList
+      isLoading={isLoading && page === 1}
       isFetching={isFetching}
       isSuccess={isSuccess}
       isError={isError}
-      data={data?.data || []}
       onLoadMore={() => loadMore(refetch, () => setPage(s => ++s), isError)}
-      // canLoadMore={false}
-      totalPages={data?.totalPages}
+      totalPages={initialData.totalPages || data?.totalPages || 1}
       currentPage={page}
-    />
+    >
+      {
+        list.map(product => {
+          return (
+            <MovieCard
+              {...product}
+              type={'movie'}
+            />
+          )
+        })
+      }
+    </MediaList>
   )
 }

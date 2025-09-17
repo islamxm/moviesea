@@ -1,3 +1,6 @@
+import z from 'zod'
+import { SeriesDtoSchema } from "./contracts"
+
 export type SeriesList = 'airing-today' | 'popular' | 'top-rated' | 'on-the-air'
 
 export const seriesList:Record<SeriesList, any> = {
@@ -16,3 +19,6 @@ export type SeriesBase = {
   genres: any[]
   first_air_date: string
 }
+
+export type SeriesDto = z.infer<typeof SeriesDtoSchema>
+

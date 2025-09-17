@@ -1,33 +1,29 @@
 'use client'
-import { MovieCard } from '../MovieCard/MovieCard'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
-import { FC, useRef } from 'react'
+import { FC, PropsWithChildren, useRef } from 'react'
 import { ComponentStatusProps } from '@/shared/types/ui'
-import { MovieCardExtra } from '../MovieCardExtra/MovieCardExtra'
-import { AdultBadge } from '../AdultBadge/AdultBadge'
-import { VoteAverageBadge } from '../VoteAverageBadge/VoteAverageBadge'
 import { useLoadMore } from '@/shared/hooks/useLoadMore'
-import { MovieListSkeleton } from './MovieList.skeleton'
+import { MediaListSkeleton } from './MediaList.skeleton'
 
-type Props = {
+type Props = PropsWithChildren<{
   data?: Array<any>
   onLoadMore?: (...args: any[]) => any,
-  canLoadMore?: boolean,
   totalPages?: number
   currentPage?: number
-} & ComponentStatusProps
+} & ComponentStatusProps>
 
-export const MovieList: FC<Props> = ({
+export const MediaList: FC<Props> = ({
   data = [],
   onLoadMore,
   totalPages,
   currentPage,
-  // canLoadMore,
-
   isLoading = true,
   isError,
   isFetching,
-  isSuccess, }) => {
+  isSuccess, 
+
+  children
+}) => {
   const loaderRef = useRef<HTMLDivElement>(null)
   const canLoadMore = (currentPage && totalPages) && currentPage <= totalPages
 
@@ -39,11 +35,12 @@ export const MovieList: FC<Props> = ({
 
   if (isError) return <>Error</>
 
-  if (isLoading) return <MovieListSkeleton />
+  if (isLoading) return <MediaListSkeleton />
 
   return (
     <HStack fill col={3} wrap gap={20}>
-      {
+      {children}
+      {/* {
         data.map(movie => (
           <MovieCard
             key={movie.id}
@@ -55,7 +52,7 @@ export const MovieList: FC<Props> = ({
             }
             data={movie} />
         ))
-      }
+      } */}
       {
         canLoadMore &&
         <div

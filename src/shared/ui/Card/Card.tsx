@@ -1,31 +1,35 @@
-import { FC } from 'react'
+'use client'
+import { FC, memo, ReactNode, useState, useRef, useEffect } from 'react'
 import classes from './classes.module.scss'
-import Link from 'next/link'
-import { Mods } from '@/shared/lib/cn'
-import { VStack } from '@/shared/ui/Stack/VStack/VStack'
-import { cn } from '@/shared/lib/cn'
-import { ReactNode, useState } from 'react'
-import { useStatus } from '@/shared/hooks/useStatus'
-import { AnimatePresence, motion } from 'framer-motion'
-import moviePlaceholderImg from 'public/movie-placeholder.png'
 import { Title } from '@/shared/ui/Title/Title'
+import Link from 'next/link'
+import { VStack } from '@/shared/ui/Stack/VStack/VStack'
+import { cn, Mods } from '@/shared/lib/cn'
+import moviePlaceholderImg from 'public/movie-placeholder.png'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useStatus } from '@/shared/hooks/useStatus'
+import Image from 'next/image'
+import { MediaType } from '@/shared/api/types'
+import { MediaBase } from '@/shared/api/types'
+import { Url } from 'next/dist/shared/lib/router/router'
 
 type Props = {
+  data: MediaBase
+  link: Url,
   topExtra?: ReactNode
   bottomExtra?: ReactNode
   withDetails?: boolean
-  data?: any
 }
 
-export const Card: FC<Props> = ({
+export const Card: FC<Props> = memo(({
+  data,
+  link,
   topExtra,
   bottomExtra,
   withDetails,
-
-  data
 }) => {
   const { isSuccess, isError, changeStatus } = useStatus()
-
+  const imgRef = useRef<HTMLImageElement>(null)
   const [hovered, setHovered] = useState(false)
 
   const mods: Mods = {
@@ -33,30 +37,37 @@ export const Card: FC<Props> = ({
     [classes.img_empty]: isError
   }
 
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete) {
+      changeStatus('isSuccess', true)
+    }
+  }, [imgRef])
 
   return (
-    <Link href={'#'} className={classes.wrapper} onMouseLeave={() => setHovered(false)} onMouseOver={() => setHovered(true)}>
+
+    <Link href={link} className={classes.wrapper} onMouseLeave={() => setHovered(false)} onMouseOver={() => setHovered(true)}>
       {topExtra && <div className={classes.top_extra}>{topExtra}</div>}
       <VStack gap={10}>
         <div className={classes.image}>
-          <img
+          <Image
             className={cn([classes.img_el], mods)}
-            src={data?.poster_path ? `${process.env.NEXT_PUBLIC_IMAGES_URL}w500${data.poster_path}` : moviePlaceholderImg.src} alt="some alt"
+            src={data?.image ? `${process.env.NEXT_PUBLIC_IMAGES_URL}w500${data.image}` : moviePlaceholderImg.src} alt={data.title}
             width={154}
             height={154}
             onLoad={() => changeStatus('isSuccess', true)}
             onError={() => changeStatus('isError', true)}
+            loading='lazy'
+            ref={imgRef}
           />
+          {bottomExtra && <div className={classes.bottom_extra}>{bottomExtra}</div>}
           <AnimatePresence>
-            {(hovered && bottomExtra) && <motion.div
+            {hovered && <motion.div
               initial={{ transform: 'translateY(100%)' }}
               exit={{ opacity: 0 }}
               animate={{ transform: 'translateY(0)' }}
               className={classes.bottom_extra}>
-              {bottomExtra}
             </motion.div>}
           </AnimatePresence>
-
         </div>
         <div className={classes.title}>
           <Title className={classes.title_el} textAlign={'left'} level={6}>
@@ -74,4 +85,4 @@ export const Card: FC<Props> = ({
       )}
     </Link>
   )
-}
+})

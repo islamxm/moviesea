@@ -1,27 +1,15 @@
-import {z} from 'zod'
+export type MediaType = 'movie' | 'series'
 
-import {
-  UserDtoSchema,
-  MovieDtoSchema,
-  SeriesDtoSchema,
-  ReviewDtoSchema,
-  MovieDetailsDtoSchema
-} from "./contracts";
+export type MediaBase = {
+  id: number
+  image: string | null
+  title: string
+  vote_average: number
+  adult: boolean
+  type: MediaType
+}
 
 export type ListResponse<T extends {}> = {
   data: Array<T>,
   totalPages: number
 }
-
-export type UserDto = z.infer<typeof UserDtoSchema>
-
-export type MovieDto = z.infer<typeof MovieDtoSchema>
-export type MovieDetailsDto = z.infer<typeof MovieDetailsDtoSchema>
-
-export type SeriesDto = z.infer<typeof SeriesDtoSchema>
-
-export type ReviewDto = z.infer<typeof ReviewDtoSchema>
-
-
-
-//common generics
