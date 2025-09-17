@@ -1,4 +1,3 @@
-// 'use client'
 import { Title } from '@/shared/ui/Title/Title'
 import { VStack } from '@/shared/ui/Stack/VStack/VStack'
 import { Container } from '@/shared/ui/Container/Container'
@@ -7,13 +6,10 @@ import { SelectMovieList } from '@/features/select-movie-list'
 import { DefaultAnimLayout } from '@/_app/layouts/DefaultAnimLayout'
 import { movieApi, MovieLists } from '@/entites/movie'
 import { createStore } from '@/_app/providers/StoreProvider'
-import { headers } from 'next/headers'
-import { acceptLanguageParser } from '@/shared/lib/acceptLanguageParser'
 import { AppLanguages } from '@/shared/types/locale'
 import { redirect } from 'next/navigation'
 import { AcceptLanguageHeaderParsedObject } from '@/shared/types/common'
 import { ListResponse, MediaBase } from '@/shared/api/types'
-import { locationActions } from '@/entites/location/model/locationSlice'
 
 import { NowPlayingMovies } from '../NowPlayingMovies/NowPlayingMovies'
 import { PopularMovies } from '../PopularMovies/PopularMovies'
@@ -33,7 +29,7 @@ export const MoviesPage: FC<Props> = async ({
   store,
   acceptLanguage
 }) => {
-  const {mainLanguage} = acceptLanguage
+  const { mainLanguage } = acceptLanguage
 
   // store.dispatch(locationActions.updateLang(mainLanguage))
 
@@ -54,7 +50,20 @@ export const MoviesPage: FC<Props> = async ({
       redirect('/movies?category=now-playing')
   }
 
-  const initialData:ListResponse<MediaBase> = await movieApi.endpoints.getNowPlayingMovies.select({ page: 1 })(store.getState()).data || {data: [], totalPages: 1}
+  const initialData = (): ListResponse<MediaBase> => {
+    switch (initialMovieListType) {
+      case 'now-playing':
+        return movieApi.endpoints.getNowPlayingMovies.select({ page: 1 })(store.getState()).data || { data: [], totalPages: 1 }
+      case 'popular':
+        return movieApi.endpoints.getPopularMovies.select({ page: 1 })(store.getState()).data || { data: [], totalPages: 1 }
+      case 'top-rated':
+        return movieApi.endpoints.getTopRatedMovies.select({ page: 1 })(store.getState()).data || { data: [], totalPages: 1 }
+      case 'upcoming':
+        return movieApi.endpoints.getUpcomingMovies.select({ page: 1 })(store.getState()).data || { data: [], totalPages: 1 }
+      default:
+        return { data: [], totalPages: 1 }
+    }
+  }
 
   return (
     <DefaultAnimLayout>
@@ -64,14 +73,13 @@ export const MoviesPage: FC<Props> = async ({
           <Title textAlign='left'>Movies</Title>
 
           <SelectMovieList
-            // onSelectList={}
             value={initialMovieListType}
           />
 
-          {initialMovieListType === 'now-playing' && <NowPlayingMovies initialData={initialData} />}
-          {initialMovieListType === 'popular' && <PopularMovies initialData={initialData} />}
-          {initialMovieListType === 'top-rated' && <TopRatedMovies initialData={initialData}/>}
-          {initialMovieListType === 'upcoming' && <UpcomingMovies initialData={initialData}/>}
+          {initialMovieListType === 'now-playing' && <NowPlayingMovies initialData={initialData()} />}
+          {initialMovieListType === 'popular' && <PopularMovies initialData={initialData()} />}
+          {initialMovieListType === 'top-rated' && <TopRatedMovies initialData={initialData()} />}
+          {initialMovieListType === 'upcoming' && <UpcomingMovies initialData={initialData()} />}
 
         </VStack>
       </Container>

@@ -1,19 +1,19 @@
 'use client'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
-import { FC, PropsWithChildren, useRef } from 'react'
+import { FC, PropsWithChildren, useEffect, useRef } from 'react'
 import { ComponentStatusProps } from '@/shared/types/ui'
 import { useLoadMore } from '@/shared/hooks/useLoadMore'
 import { MediaListSkeleton } from './MediaList.skeleton'
+import {toast} from 'sonner'
+import { Button } from '@/shared/ui/Button/Button'
 
 type Props = PropsWithChildren<{
-  data?: Array<any>
   onLoadMore?: (...args: any[]) => any,
   totalPages?: number
   currentPage?: number
 } & ComponentStatusProps>
 
 export const MediaList: FC<Props> = ({
-  data = [],
   onLoadMore,
   totalPages,
   currentPage,
@@ -27,13 +27,40 @@ export const MediaList: FC<Props> = ({
   const loaderRef = useRef<HTMLDivElement>(null)
   const canLoadMore = (currentPage && totalPages) && currentPage <= totalPages
 
-  useLoadMore(
-    loaderRef,
-    isFetching,
-    onLoadMore,
-  )
+  // useLoadMore(
+  //   loaderRef,
+  //   isFetching,
+  //   onLoadMore,
+  // )
 
-  if (isError) return <>Error</>
+  useEffect(() => {
+    const observer = new IntersectionObserver(entries => {
+      const target = entries[0];
+      if (target.isIntersecting && !isFetching) {
+        onLoadMore?.()
+      }
+    }, {
+      root: null,
+      rootMargin: '200px',
+      threshold: 1.0,
+    });
+    
+    if(loaderRef.current) observer.observe(loaderRef.current);
+
+    return () => {
+      if (loaderRef.current) {
+        observer.disconnect();
+      }
+    };
+
+  }, [isFetching, loaderRef]);
+
+  useEffect(() => {
+    if(isError) toast.error('Проверьте соединение')
+  }, [isError])
+
+
+  // if (isError) return <>Error</>
 
   if (isLoading) return <MediaListSkeleton />
 
@@ -58,6 +85,7 @@ export const MediaList: FC<Props> = ({
         <div
           style={{ width: '100%', height: 1, border: '1px solid red' }}
           ref={loaderRef} />
+        // <Button onClick={onLoadMore}>Load more</Button>
       }
     </HStack>
   )
