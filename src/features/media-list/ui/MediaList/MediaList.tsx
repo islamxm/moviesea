@@ -4,6 +4,8 @@ import { FC, PropsWithChildren, useRef } from 'react'
 import { ComponentStatusProps } from '@/shared/types/ui'
 import { useLoadMore } from '@/shared/hooks/useLoadMore'
 import { MediaListSkeleton } from './MediaList.skeleton'
+import { MediaListError } from '../MediaListError/MediaListError'
+import { MediaListSpinner } from '../MediaListSpinner/MediaListSpinner'
 
 type Props = PropsWithChildren<{
   data?: Array<any>
@@ -53,6 +55,9 @@ export const MediaList: FC<Props> = ({
             data={movie} />
         ))
       } */}
+      {
+        isError && <MediaListError/>
+      }
       {
         canLoadMore &&
         <div
