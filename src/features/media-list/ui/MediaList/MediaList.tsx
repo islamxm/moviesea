@@ -24,7 +24,7 @@ export const MediaList: FC<Props> = ({
 
   children
 }) => {
-  const loaderRef = useRef<HTMLDivElement>(null)
+  const loaderRef = useRef<HTMLButtonElement>(null)
   const canLoadMore = (currentPage && totalPages) && currentPage <= totalPages
 
   // useLoadMore(
@@ -40,24 +40,8 @@ export const MediaList: FC<Props> = ({
   return (
     <HStack fill col={3} wrap gap={20}>
       {children}
-      {/* {
-        data.map(movie => (
-          <MovieCard
-            key={movie.id}
-            topExtra={
-              <MovieCardExtra>
-                <VoteAverageBadge value={movie?.vote_average} />
-                {movie?.adult && <AdultBadge />}
-              </MovieCardExtra>
-            }
-            data={movie} />
-        ))
-      } */}
-      
       {isError && <MediaListError />}
-    
-      {canLoadMore && <MediaListSpinner />}
-    
+      {canLoadMore && <MediaListSpinner ref={loaderRef}/>}
     </HStack>
   )
 }
