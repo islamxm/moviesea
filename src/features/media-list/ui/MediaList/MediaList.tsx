@@ -20,7 +20,7 @@ export const MediaList: FC<Props> = ({
   isLoading = true,
   isError,
   isFetching,
-  isSuccess, 
+  isSuccess,
 
   children
 }) => {
@@ -53,16 +53,11 @@ export const MediaList: FC<Props> = ({
             data={movie} />
         ))
       } */}
-      {
-        isError && <MediaListError/>
-      }
-      {
-        canLoadMore &&
-        <div
-          style={{ width: '100%', height: 1, border: '1px solid red' }}
-          ref={loaderRef} />
-        // <Button onClick={onLoadMore}>Load more</Button>
-      }
+      
+      {isError && <MediaListError />}
+    
+      {canLoadMore && <MediaListSpinner />}
+    
     </HStack>
   )
 }
