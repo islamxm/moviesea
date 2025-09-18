@@ -1,14 +1,14 @@
 import { rtkApi } from "@/shared/api/rtkApi";
-import { SeriesDtoSchema } from "@/shared/api/contracts";
 import z from "zod";
 import { seriesDtoMap } from "../lib/seriesDtoMap";
 import { AppLanguages } from "@/shared/types/locale";
-import { ListResponse, SeriesDto } from "@/shared/api/types";
+import { ListResponse, MediaBase } from "@/shared/api/types";
+import { SeriesDtoSchema } from "../contracts";
 
 export const seriesApi = rtkApi.injectEndpoints({
   endpoints: (build) => ({
 
-    getAiringTodaySeries: build.query<ListResponse<SeriesDto>, { page?: number, language?: AppLanguages }>({
+    getAiringTodaySeries: build.query<ListResponse<MediaBase>, { page?: number, language?: string }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'tv/airing_today',
         params: {
@@ -20,13 +20,14 @@ export const seriesApi = rtkApi.injectEndpoints({
         currentCacheData.data.push(...res.data)
 
       },
-      serializeQueryArgs: ({ endpointName, ...rest }) => {
+      serializeQueryArgs: ({ endpointName }) => {
         return endpointName
       },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg?.page !== previousArg?.page
       },
       transformResponse: (res: any): any => {
+        console.log(res.results)
         if (z.array(SeriesDtoSchema).parse(res.results)) {
           return {
             data: res.results.map(seriesDtoMap) || [],
@@ -36,7 +37,7 @@ export const seriesApi = rtkApi.injectEndpoints({
       },
     }),
 
-    getOnTheAirSeries: build.query<ListResponse<SeriesDto>, { page?: number, language?: AppLanguages }>({
+    getOnTheAirSeries: build.query<ListResponse<MediaBase>, { page?: number, language?: string }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'tv/on_the_air',
         params: {
@@ -63,7 +64,7 @@ export const seriesApi = rtkApi.injectEndpoints({
       },
     }),
 
-    getPopularSeries: build.query<ListResponse<SeriesDto>, { page?: number, language?: AppLanguages }>({
+    getPopularSeries: build.query<ListResponse<MediaBase>, { page?: number, language?: string }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'tv/popular',
         params: {
@@ -91,7 +92,7 @@ export const seriesApi = rtkApi.injectEndpoints({
       },
     }),
 
-    getTopRatedSeries: build.query<ListResponse<SeriesDto>, { page?: number, language?: AppLanguages }>({
+    getTopRatedSeries: build.query<ListResponse<MediaBase>, { page?: number, language?: string }>({
       query: ({ page = 1, language = 'en-EN' }) => ({
         url: 'tv/top_rated',
         params: {

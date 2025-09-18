@@ -2,7 +2,6 @@
 import { MovieLists, movieLists } from '@/entites/movie'
 import { Tabs } from '@/shared/ui/Tabs/Tabs'
 import { FC, useCallback, useEffect } from 'react'
-import Router from 'next/router'
 import { useRouter } from 'next/navigation'
 
 

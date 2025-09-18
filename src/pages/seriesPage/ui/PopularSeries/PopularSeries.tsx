@@ -1,25 +1,55 @@
-import { MovieList } from "@/entites/movie"
+'use client'
 import { seriesApi } from "@/entites/series/api/seriesApi"
-import { useState } from "react"
+import { FC, useState } from "react"
+import { locationSelector } from "@/entites/location"
+import { useSelector } from "@/shared/hooks/useStore"
+import { MediaList } from "@/features/media-list"
+import { ListResponse } from "@/shared/api/types"
+import { MediaBase } from "@/shared/api/types"
+import { loadMore } from "@/shared/lib/loadMore"
+import { SeriesCard } from "@/entites/series"
 
-export const PopularSeries = () => {
+type Props = {
+  initialData: ListResponse<MediaBase>
+}
+
+export const PopularSeries: FC<Props> = ({initialData}) => {
+  const { language } = useSelector(locationSelector)
   const [page, setPage] = useState(1)
   const {
     data,
     isLoading,
     isFetching,
     isSuccess,
-    isError
-  } = seriesApi.useGetPopularSeriesQuery({ page })
+    isError,
+    refetch
+  } = seriesApi.useGetPopularSeriesQuery({
+    page,
+    language
+  }, { skip: page > 1 ? false : true })
+
+  const list = [...initialData.data, ...(data?.data || [])]
 
   return (
-    <MovieList
-      isLoading={isLoading}
+    <MediaList
+      isLoading={isLoading && page === 1}
       isFetching={isFetching}
       isSuccess={isSuccess}
       isError={isError}
-      data={data}
-      onLoadMore={() => setPage(s => s + 1)}
-    />
+      onLoadMore={() => loadMore(refetch, () => setPage(s => ++s), isError)}
+      totalPages={initialData.totalPages || data?.totalPages || 1}
+      currentPage={page}
+    >
+      {
+        list.map(product => {
+          return (
+            <SeriesCard
+              {...product}
+              type={'series'}
+            />
+          )
+        })
+      }
+    </MediaList>
   )
 }

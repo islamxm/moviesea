@@ -2,8 +2,8 @@
 import { locationSelector } from "@/entites/location"
 import { movieApi } from "@/entites/movie"
 import { useSelector } from "@/shared/hooks/useStore"
-import { FC, useState } from "react"
-import { loadMore } from "../../lib/loadMore"
+import { FC, useEffect, useState } from "react"
+import { loadMore } from "@/shared/lib/loadMore"
 import { ListResponse } from "@/shared/api/types"
 import { MediaBase } from "@/shared/api/types"
 import { MediaList } from "@/features/media-list"
@@ -16,19 +16,34 @@ type Props = {
 export const PopularMovies: FC<Props> = ({ initialData }) => {
   const { language } = useSelector(locationSelector)
   const [page, setPage] = useState(1)
-  const {
+  // const {
+  //   data,
+  //   isLoading,
+  //   isFetching,
+  //   isSuccess,
+  //   isError,
+  //   refetch
+  // } = movieApi.useGetPopularMoviesQuery({
+  //   page,
+  //   language
+  // }, { skip: page > 1 ? false : true })
+
+  const [trigger, {
     data,
     isLoading,
     isFetching,
     isSuccess,
     isError,
-    refetch
-  } = movieApi.useGetPopularMoviesQuery({
-    page,
-    language
-  }, { skip: page > 1 ? false : true })
+  }] = movieApi.useLazyGetPopularMoviesQuery()
 
   const list = [...initialData.data, ...(data?.data || [])]
+
+  useEffect(() => {
+    console.log(page)
+    if (page > 1 && !isError) {
+      trigger({ page, language })
+    }
+  }, [page, isError])
 
   return (
     <MediaList
@@ -36,7 +51,7 @@ export const PopularMovies: FC<Props> = ({ initialData }) => {
       isFetching={isFetching}
       isSuccess={isSuccess}
       isError={isError}
-      onLoadMore={() => loadMore(refetch, () => setPage(s => ++s), isError)}
+      onLoadMore={() => !isError && setPage(s => s + 1)}
       totalPages={initialData.totalPages || data?.totalPages || 1}
       currentPage={page}
     >
