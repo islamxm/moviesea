@@ -7,8 +7,6 @@ import { movieDtoMap } from "../lib/movieDtoMap";
 import { AppLanguages } from "@/shared/types/locale";
 
 
-
-
 export const movieApi = rtkApi.injectEndpoints({
   endpoints: (build) => ({
 
@@ -21,7 +19,7 @@ export const movieApi = rtkApi.injectEndpoints({
         }
       }),
       infiniteQueryOptions: {
-        initialPageParam: 1,
+        initialPageParam: 259,
         getNextPageParam(lastPage, allPages, lastPageParam, allPageParams, queryArg) {
           return lastPage.totalPages > lastPage.page ? lastPage.page + 1 : undefined;
         },

@@ -25,6 +25,7 @@ export const NowPlayingMovies: FC<Props> = ({ initialData = [] }) => {
     isError,
     fetchNextPage,
     refetch,
+    hasNextPage
   } = movieApi.useGetNowPlayingMoviesInfiniteQuery({ language })
 
   const list = data?.pages.map(f => f.data).flat() ?? []
@@ -37,6 +38,7 @@ export const NowPlayingMovies: FC<Props> = ({ initialData = [] }) => {
       isSuccess={isSuccess}
       isError={isError}
       onLoadMore={() => loadMore(refetch, fetchNextPage, isError)}
+      canLoadMore={hasNextPage}
     >
       {
         list.map(product => {

@@ -24,6 +24,7 @@ export const PopularMovies: FC<Props> = ({ initialData = [] }) => {
     isError,
     fetchNextPage,
     refetch,
+    hasNextPage
   } = movieApi.useGetPopularMoviesInfiniteQuery({ language })
 
 
@@ -38,6 +39,8 @@ export const PopularMovies: FC<Props> = ({ initialData = [] }) => {
       isSuccess={isSuccess}
       isError={isError}
       onLoadMore={() => loadMore(refetch, fetchNextPage, isError)}
+      canLoadMore={hasNextPage}
+
     >
       {
         list.map(product => {
