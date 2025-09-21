@@ -28,7 +28,7 @@ export const MediaList: FC<Props> = ({
     if (isVisible) onLoadMore?.()
   }, [isVisible])
  
-  // if (isLoading && !hasInitData) return <MediaListSkeleton />
+  if (isLoading && !hasInitData) return <MediaListSkeleton />
 
   return (
     <HStack fill col={3} wrap gap={20}>

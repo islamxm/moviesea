@@ -41,7 +41,7 @@ export const NowPlayingMovies: FC<Props> = ({ initialData = [] }) => {
       isError={isError}
       onLoadMore={() => loadMore(refetch, fetchNextPage, isError)}
       canLoadMore={hasNextPage}
-      hasInitData={initialData.length === 0}
+      hasInitData={initialData.length > 0}
     >
       {
         list.map(product => {
