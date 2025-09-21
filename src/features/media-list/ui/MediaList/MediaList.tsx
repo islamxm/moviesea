@@ -9,7 +9,8 @@ import { useIntersectionObserver } from 'react-intersection-observer-hook'
 
 type Props = PropsWithChildren<{
   onLoadMore?: (...args: any[]) => any,
-  canLoadMore?: boolean
+  canLoadMore?: boolean,
+  hasInitData?: boolean
 } & ComponentStatusProps>
 
 export const MediaList: FC<Props> = ({
@@ -17,7 +18,8 @@ export const MediaList: FC<Props> = ({
   isLoading = true,
   isError,
   canLoadMore,
-  children
+  children,
+  hasInitData
 }) => {
   const [ref, { entry }] = useIntersectionObserver();
   const isVisible = entry && entry.isIntersecting
@@ -26,7 +28,7 @@ export const MediaList: FC<Props> = ({
     if (isVisible) onLoadMore?.()
   }, [isVisible])
  
-  if (isLoading) return <MediaListSkeleton />
+  // if (isLoading && !hasInitData) return <MediaListSkeleton />
 
   return (
     <HStack fill col={3} wrap gap={20}>
