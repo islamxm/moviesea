@@ -15,7 +15,7 @@ import { NowPlayingMovies } from '../NowPlayingMovies/NowPlayingMovies'
 import { PopularMovies } from '../PopularMovies/PopularMovies'
 import { TopRatedMovies } from '../TopRatedMovies/TopRatedMovies'
 import { UpcomingMovies } from '../UpcomingMovies/UpcomingMovies'
-
+import { MoviesContent } from '../MoviesContent/MoviesContent'
 
 
 type Props = {
@@ -71,7 +71,7 @@ export const MoviesPage: FC<Props> = async ({
         <VStack align={'start'} gap={25}>
 
           <Title textAlign='left'>Movies</Title>
-
+{/* 
           <SelectMovieList
             value={initialMovieListType}
           />
@@ -79,7 +79,11 @@ export const MoviesPage: FC<Props> = async ({
           {initialMovieListType === 'now-playing' && <NowPlayingMovies initialData={initialData()} />}
           {initialMovieListType === 'popular' && <PopularMovies initialData={initialData()} />}
           {initialMovieListType === 'top-rated' && <TopRatedMovies initialData={initialData()} />}
-          {initialMovieListType === 'upcoming' && <UpcomingMovies initialData={initialData()} />}
+          {initialMovieListType === 'upcoming' && <UpcomingMovies initialData={initialData()} />} */}
+          <MoviesContent
+            initialData={initialData()}
+            initialMovieListType={initialMovieListType}
+            />
 
         </VStack>
       </Container>

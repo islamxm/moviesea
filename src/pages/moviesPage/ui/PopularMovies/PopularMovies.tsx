@@ -10,50 +10,34 @@ import { MediaList } from "@/features/media-list"
 import { MovieCard } from "@/entites/movie"
 
 type Props = {
-  initialData: ListResponse<MediaBase>
+  initialData: Array<MediaBase>
 }
 
-export const PopularMovies: FC<Props> = ({ initialData }) => {
+export const PopularMovies: FC<Props> = ({ initialData = [] }) => {
   const { language } = useSelector(locationSelector)
-  const [page, setPage] = useState(1)
-  // const {
-  //   data,
-  //   isLoading,
-  //   isFetching,
-  //   isSuccess,
-  //   isError,
-  //   refetch
-  // } = movieApi.useGetPopularMoviesQuery({
-  //   page,
-  //   language
-  // }, { skip: page > 1 ? false : true })
 
-  const [trigger, {
+  const {
     data,
     isLoading,
     isFetching,
     isSuccess,
     isError,
-  }] = movieApi.useLazyGetPopularMoviesQuery()
+    fetchNextPage,
+    refetch,
+  } = movieApi.useGetPopularMoviesInfiniteQuery({ language })
 
-  const list = [...initialData.data, ...(data?.data || [])]
 
-  useEffect(() => {
-    console.log(page)
-    if (page > 1 && !isError) {
-      trigger({ page, language })
-    }
-  }, [page, isError])
+  const list = data?.pages.map(f => f.data).flat() ?? []
+
+
 
   return (
     <MediaList
-      isLoading={isLoading && page === 1}
+      isLoading={isLoading}
       isFetching={isFetching}
       isSuccess={isSuccess}
       isError={isError}
-      onLoadMore={() => !isError && setPage(s => s + 1)}
-      totalPages={initialData.totalPages || data?.totalPages || 1}
-      currentPage={page}
+      onLoadMore={() => loadMore(refetch, fetchNextPage, isError)}
     >
       {
         list.map(product => {

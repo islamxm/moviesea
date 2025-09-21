@@ -6,17 +6,17 @@ import { useLoadMore } from '@/shared/hooks/useLoadMore'
 import { MediaListSkeleton } from './MediaList.skeleton'
 import { MediaListError } from '../MediaListError/MediaListError'
 import { MediaListSpinner } from '../MediaListSpinner/MediaListSpinner'
-
+import { useIntersectionObserver } from 'react-intersection-observer-hook'
 type Props = PropsWithChildren<{
   onLoadMore?: (...args: any[]) => any,
-  totalPages?: number
-  currentPage?: number
+  // totalPages?: number
+  // currentPage?: number
 } & ComponentStatusProps>
 
 export const MediaList: FC<Props> = ({
   onLoadMore,
-  totalPages,
-  currentPage,
+  // totalPages,
+  // currentPage,
   isLoading = true,
   isError,
   isFetching,
@@ -24,24 +24,21 @@ export const MediaList: FC<Props> = ({
 
   children
 }) => {
-  const loaderRef = useRef<HTMLButtonElement>(null)
-  const canLoadMore = (currentPage && totalPages) && currentPage <= totalPages
+  const [ref, { entry }] = useIntersectionObserver();
+  // const canLoadMore = (currentPage && totalPages) && currentPage <= totalPages
+  const isVisible = entry && entry.isIntersecting
 
-  // useLoadMore(
-  //   loaderRef,
-  //   isFetching,
-  //   onLoadMore,
-  // )
-
-  if (isError) return <>Error</>
-
+  useEffect(() => {
+    if (isVisible) onLoadMore?.()
+  }, [isVisible])
+ 
   if (isLoading) return <MediaListSkeleton />
 
   return (
     <HStack fill col={3} wrap gap={20}>
       {children}
-      {isError && <MediaListError />}
-      {canLoadMore && <MediaListSpinner ref={loaderRef}/>}
+      {isError && <MediaListError onRetry={onLoadMore} />}
+      {!isError && <MediaListSpinner ref={ref} />}
     </HStack>
   )
 }

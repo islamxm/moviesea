@@ -1,8 +1,8 @@
 import { Ref, RefObject, useEffect } from "react";
+import { useIntersectionObserver } from "react-intersection-observer-hook";
 
-
-export const useLoadMore = (
-  ref: RefObject<HTMLDivElement | null>,
+export const useLoadMore = <T extends HTMLElement>(
+  ref: RefObject<T | null>,
   isFetching?: boolean,
   onLoadMore?: (...args: any[]) => void,
 ) => {

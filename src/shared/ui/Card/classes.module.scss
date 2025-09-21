@@ -7,6 +7,10 @@
   background-color: var(--bg_color_light);
   overflow: hidden;
 
+  .link {
+    display: block;
+  }
+
   .top_extra {
     position: absolute;
     top: 0;

@@ -13,3 +13,5 @@ export type ListResponse<T extends {}> = {
   data: Array<T>,
   totalPages: number
 }
+
+export type InfiniteListResponse<T extends {}> = ListResponse<T> & {page: number}

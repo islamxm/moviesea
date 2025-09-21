@@ -1,3 +1,10 @@
+//переопределение 
+:root, [data-theme="dark"] {
+  color-scheme: dark;
+  --heroui-background: var(--bg_color); /* или другой тёмный цвет */
+  // --heroui-foreground-50: 240 3.7% 15.9%;
+}
+
 :root {
   //global
   --b_radius: 12px;

@@ -1,4 +1,9 @@
-@use './reset.scss';
-@use './vars.scss';
-@use './fonts.scss';
-@use './global.scss';
+@import "tailwindcss";
+@plugin '../ui/hero.ts';
+@source '../../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@import './reset.scss';
+@import './vars.scss';
+@import './fonts.scss';
+@import './global.scss';
+// @custom-variant dark (&:is(.dark *));
+
