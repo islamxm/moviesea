@@ -1,16 +1,11 @@
 'use client'
 import { locationSelector } from "@/entites/location"
 import { movieApi } from "@/entites/movie"
-import { useDispatch, useSelector } from "@/shared/hooks/useStore"
-import { FC, useState, useEffect, useRef } from "react"
-import { loadMore } from "@/shared/lib/loadMore"
-import { InfiniteListResponse, ListResponse } from "@/shared/api/types"
+import { useSelector } from "@/shared/hooks/useStore"
+import { FC } from "react"
 import { MediaBase } from "@/shared/api/types"
 import { MediaList } from "@/features/media-list"
 import { MovieCard } from "@/entites/movie"
-import { Button } from "@/shared/ui/Button/Button"
-import { MovieInfiniteDataType } from "@/entites/movie/api/movieApi"
-
 
 type Props = {
   initialData: Array<MediaBase>
@@ -18,7 +13,6 @@ type Props = {
 
 export const NowPlayingMovies: FC<Props> = ({ initialData = [] }) => {
   const { language } = useSelector(locationSelector)
-  
 
   const {
     data,
@@ -27,7 +21,6 @@ export const NowPlayingMovies: FC<Props> = ({ initialData = [] }) => {
     isSuccess,
     isError,
     fetchNextPage,
-    refetch,
     hasNextPage,
   } = movieApi.useGetNowPlayingMoviesInfiniteQuery({ language: 'ru' }, { initialPageParam: initialData.length > 0 ? 2 : 1})
 
@@ -39,7 +32,7 @@ export const NowPlayingMovies: FC<Props> = ({ initialData = [] }) => {
       isFetching={isFetching}
       isSuccess={isSuccess}
       isError={isError}
-      onLoadMore={() => loadMore(refetch, fetchNextPage, isError)}
+      onLoadMore={fetchNextPage}
       canLoadMore={hasNextPage}
       hasInitData={initialData.length > 0}
     >
@@ -52,7 +45,6 @@ export const NowPlayingMovies: FC<Props> = ({ initialData = [] }) => {
             />
           )
         })
-
       }
     </MediaList>
   )

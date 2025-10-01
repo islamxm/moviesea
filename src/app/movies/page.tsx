@@ -1,6 +1,5 @@
 import { createStore } from "@/_app/providers/StoreProvider"
 import { MovieLists } from "@/entites/movie"
-import { MoviesPage as MoviesPageComponent } from "@/pages/moviesPage"
 import { acceptLanguageParser } from "@/shared/lib/acceptLanguageParser"
 import { FC } from "react"
 import { headers } from "next/headers"
@@ -13,16 +12,22 @@ import { VStack } from "@/shared/ui/Stack/VStack/VStack"
 import { Title } from "@/shared/ui/Title/Title"
 import { MoviesContent } from "@/pages/moviesPage/ui/MoviesContent/MoviesContent"
 import { AppLanguages } from "@/shared/types/locale"
-const axios = require('axios').default;
 
 const MoviesPage: FC<{ searchParams?: { category?: MovieLists } }> = async ({ searchParams }) => {
+  //инициализация стора на сервере
   const store = createStore()
+  // получение заголовков
   const headersList = await headers()
+  // получение параметров url
   const params = await searchParams
+  // получение начальной категории фильмов из параметров url
   const movieListType = params?.category
+  // парсинг заголовка acceptLanguage
   const acceptLanguage = acceptLanguageParser(headersList.get(headerKeys.ACCEPT_LANGUAGE))
+  // деструктуризация основного языка на основе распарсенного acceptLanguage
   const { mainLanguage } = acceptLanguage
 
+  // получение списка начального списка фильмов на сервере на основе выбранного типа
   switch (movieListType) {
     case 'now-playing':
       await store.dispatch(movieApi.endpoints.getNowPlayingMovies.initiate({ language: mainLanguage as AppLanguages }))
@@ -40,6 +45,7 @@ const MoviesPage: FC<{ searchParams?: { category?: MovieLists } }> = async ({ se
       redirect('/movies?category=now-playing')
   }
 
+  // получение начальных данных для дочерних компонентов
   const initialData = () => {
     switch (movieListType) {
       case 'now-playing':
@@ -52,8 +58,6 @@ const MoviesPage: FC<{ searchParams?: { category?: MovieLists } }> = async ({ se
         return movieApi.endpoints.getUpcomingMovies.select({ language: mainLanguage as AppLanguages })(store.getState()).data ?? {pages: [], pageParams: []}
     }
   }
-
-
 
   return (
     <DefaultAnimLayout>

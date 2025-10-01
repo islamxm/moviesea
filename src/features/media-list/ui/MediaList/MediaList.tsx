@@ -1,6 +1,6 @@
 'use client'
 import { HStack } from '@/shared/ui/Stack/HStack/HStack'
-import { FC, PropsWithChildren, useEffect, useRef } from 'react'
+import { FC, PropsWithChildren, useEffect } from 'react'
 import { ComponentStatusProps } from '@/shared/types/ui'
 import { MediaListSkeleton } from './MediaList.skeleton'
 import { MediaListError } from '../MediaListError/MediaListError'

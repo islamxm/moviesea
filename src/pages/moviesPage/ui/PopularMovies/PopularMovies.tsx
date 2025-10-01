@@ -2,9 +2,7 @@
 import { locationSelector } from "@/entites/location"
 import { movieApi } from "@/entites/movie"
 import { useSelector } from "@/shared/hooks/useStore"
-import { FC, useEffect, useState } from "react"
-import { loadMore } from "@/shared/lib/loadMore"
-import { ListResponse } from "@/shared/api/types"
+import { FC } from "react"
 import { MediaBase } from "@/shared/api/types"
 import { MediaList } from "@/features/media-list"
 import { MovieCard } from "@/entites/movie"
@@ -23,14 +21,10 @@ export const PopularMovies: FC<Props> = ({ initialData = [] }) => {
     isSuccess,
     isError,
     fetchNextPage,
-    refetch,
-    hasNextPage
-  } = movieApi.useGetPopularMoviesInfiniteQuery({ language })
+    hasNextPage,
+  } = movieApi.useGetPopularMoviesInfiniteQuery({ language: 'ru' }, { initialPageParam: initialData.length > 0 ? 2 : 1 })
 
-
-  const list = data?.pages.map(f => f.data).flat() ?? []
-
-
+  const list = [...initialData, ...(data?.pages.map(f => f.data).flat() ?? [])]
 
   return (
     <MediaList
@@ -38,9 +32,9 @@ export const PopularMovies: FC<Props> = ({ initialData = [] }) => {
       isFetching={isFetching}
       isSuccess={isSuccess}
       isError={isError}
-      onLoadMore={() => loadMore(refetch, fetchNextPage, isError)}
+      onLoadMore={fetchNextPage}
       canLoadMore={hasNextPage}
-
+      hasInitData={initialData.length > 0}
     >
       {
         list.map(product => {
@@ -51,6 +45,7 @@ export const PopularMovies: FC<Props> = ({ initialData = [] }) => {
             />
           )
         })
+
       }
     </MediaList>
   )

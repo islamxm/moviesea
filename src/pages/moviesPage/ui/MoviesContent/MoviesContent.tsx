@@ -1,15 +1,13 @@
 'use client'
 import { MovieLists } from "@/entites/movie"
-import { useState, FC, useEffect } from "react"
+import { useState, FC } from "react"
 import { SelectMovieList } from "@/features/select-movie-list"
 import { VStack } from "@/shared/ui/Stack/VStack/VStack"
 import { NowPlayingMovies } from "../NowPlayingMovies/NowPlayingMovies"
 import { PopularMovies } from "../PopularMovies/PopularMovies"
 import { TopRatedMovies } from "../TopRatedMovies/TopRatedMovies"
 import { UpcomingMovies } from "../UpcomingMovies/UpcomingMovies"
-import { InfiniteListResponse, ListResponse, MediaBase } from "@/shared/api/types"
-import { InfiniteData } from "@reduxjs/toolkit/query"
-import { movieApi, MovieInfiniteDataType } from "@/entites/movie/api/movieApi"
+import { MediaBase } from "@/shared/api/types"
 
 type Props = {
   initialMovieListType: MovieLists
@@ -21,7 +19,8 @@ export const MoviesContent: FC<Props> = ({
   initialData
 }) => {
   const [listType, setListType] = useState<MovieLists>(initialMovieListType)
-  const getCorrectInitData = initialMovieListType === listType ? initialData : []
+  
+  const initialDataFromType = initialMovieListType === listType ? initialData : []
 
 
   return (
@@ -30,9 +29,10 @@ export const MoviesContent: FC<Props> = ({
         value={listType}
         onSelectList={setListType}
       />
-      {listType === 'now-playing' && <NowPlayingMovies initialData={getCorrectInitData}/>}
-      {/* {listType === 'popular' && <PopularMovies  initialData={getCorrectInitData}/>} */}
-
+      {listType === 'now-playing' && <NowPlayingMovies initialData={initialDataFromType}/>}
+      {listType === 'popular' && <PopularMovies initialData={initialDataFromType}/>}
+      {listType === 'top-rated' && <TopRatedMovies initialData={initialDataFromType}/>}
+      {listType === 'upcoming' && <UpcomingMovies initialData={initialDataFromType}/>}
     </VStack>
   )
 }

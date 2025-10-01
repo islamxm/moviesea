@@ -2,54 +2,51 @@
 import { locationSelector } from "@/entites/location"
 import { movieApi } from "@/entites/movie"
 import { useSelector } from "@/shared/hooks/useStore"
-import { FC, useState } from "react"
-import { loadMore } from "../../lib/loadMore"
-import { ListResponse } from "@/shared/api/types"
+import { FC } from "react"
 import { MediaBase } from "@/shared/api/types"
 import { MediaList } from "@/features/media-list"
 import { MovieCard } from "@/entites/movie"
 
 type Props = {
-  initialData: ListResponse<MediaBase>
+  initialData: Array<MediaBase>
 }
 
-export const UpcomingMovies: FC<Props> = ({ initialData }) => {
+export const UpcomingMovies: FC<Props> = ({ initialData = [] }) => {
   const { language } = useSelector(locationSelector)
-  const [page, setPage] = useState(1)
+
   const {
     data,
     isLoading,
     isFetching,
     isSuccess,
     isError,
-    refetch
-  } = movieApi.useGetUpcomingMoviesQuery({
-    page,
-    language
-  }, { skip: page > 1 ? false : true })
+    fetchNextPage,
+    refetch,
+    hasNextPage,
+  } = movieApi.useGetUpcomingMoviesInfiniteQuery({ language: 'ru' }, { initialPageParam: initialData.length > 0 ? 2 : 1})
 
-  const list = [...initialData.data, ...(data?.data || [])] 
+  const list = [...initialData, ...(data?.pages.map(f => f.data).flat() ?? [])]
 
   return (
-    <MediaList
-      isLoading={isLoading && page === 1}
-      isFetching={isFetching}
-      isSuccess={isSuccess}
-      isError={isError}
-      onLoadMore={() => loadMore(refetch, () => setPage(s => ++s), isError)}
-      totalPages={initialData.totalPages || data?.totalPages || 1}
-      currentPage={page}
-    >
-      {
-        list.map(product => {
-          return (
-            <MovieCard
-              {...product}
-              type={'movie'}
-            />
-          )
-        })
-      }
-    </MediaList>
-  )
+      <MediaList
+        isLoading={isLoading}
+        isFetching={isFetching}
+        isSuccess={isSuccess}
+        isError={isError}
+        onLoadMore={fetchNextPage}
+        canLoadMore={hasNextPage}
+        hasInitData={initialData.length > 0}
+      >
+        {
+          list.map(product => {
+            return (
+              <MovieCard
+                {...product}
+                type={'movie'}
+              />
+            )
+          })
+        }
+      </MediaList>
+    )
 }
